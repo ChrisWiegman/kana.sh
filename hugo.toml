@@ -20,6 +20,7 @@ description = "A warm, earthy theme for your website, editor or terminal."
 imageSizes = [850, 710, 300]
 imageSizeString = "(max-width: 300px) 300w, (max-width: 710px) 710w, 850w"
 policies = "/policies"
+headerIcon = "images/logo.png"
 
 [params.license]
 name = "Creative Commons Licensed"
@@ -39,16 +40,46 @@ keepEndTags = false
 keepSpecialComments = false
 
 [[menus.main]]
+name = "VS Code"
+title = "The Kana VS Code theme"
+pageRef = "/vscode"
+weight = 10
+
+[[menus.main]]
+name = "Terminal"
+title = "The Kana Mac Terminal theme"
+pageRef = "/terminal"
+weight = 20
+
+[[menus.main]]
+name = "Hugo"
+title = "The Kana Hugo theme"
+pageRef = "/hugo"
+weight = 30
+
+[[menus.main]]
+name = "Xcode"
+title = "The Kana Xcode theme"
+pageRef = "/xcode"
+weight = 40
+
+[[menus.main]]
 name = "Contact"
 title = "Reach me via email"
 url = "mailto:contact@kana.sh"
-weight = 30
+weight = 50
 
 [[menus.footer]]
 name = "VS Code"
-title = "The kana VS Code theme"
+title = "The Kana VS Code theme"
 pageRef = "/vscode"
 weight = 10
+
+[[menus.footer]]
+name = "Terminal"
+title = "The Kana Mac Terminal theme"
+pageRef = "/terminal"
+weight = 15
 
 [[menus.footer]]
 name = "Hugo"
@@ -57,8 +88,8 @@ pageRef = "/hugo"
 weight = 20
 
 [[menus.footer]]
-name = "XCode"
-title = "The Kana XCode theme"
+name = "Xcode"
+title = "The Kana Xcode theme"
 pageRef = "/xcode"
 weight = 30
 

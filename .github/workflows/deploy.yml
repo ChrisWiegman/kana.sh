@@ -1,7 +1,7 @@
 name: Deploy to Cloudflare Workers
 
 env:
-  SITE_TITLE: "Chris Wiegman"
+  SITE_TITLE: "KAna Theme"
   SITE_URL: "https://kana.sh/"
   RSS_URL: "https://kana.sh/index.xml"
 
