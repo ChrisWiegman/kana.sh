@@ -1,0 +1,213 @@
+{
+  "Category: Technology": {
+    "prefix": [
+      "technology",
+      "tech"
+    ],
+    "body": "Technology",
+    "description": "Category: Technology"
+  },
+  "Category: Personal": {
+    "prefix": [
+      "personal",
+      "pers"
+    ],
+    "body": "Personal",
+    "description": "Category: Personal"
+  },
+  "Tag: Blogging": {
+    "prefix": "blogging",
+    "body": "Blogging",
+    "description": "Tag: Blogging"
+  },
+  "Tag: Apple": {
+    "prefix": "apple",
+    "body": "Apple",
+    "description": "Tag: Apple"
+  },
+  "Tag: Tools": {
+    "prefix": "tools",
+    "body": "Tools",
+    "description": "Tag: Tools"
+  },
+  "Tag: Reflection": {
+    "prefix": [
+      "reflection",
+      "reflect"
+    ],
+    "body": "Reflection",
+    "description": "Tag: Reflection"
+  },
+  "Tag: Digital Life": {
+    "prefix": [
+      "digital life",
+      "digitallife",
+      "digital"
+    ],
+    "body": "Digital Life",
+    "description": "Tag: Digital Life"
+  },
+  "Tag: Web Development": {
+    "prefix": [
+      "web development",
+      "webdevelopment",
+      "webdev",
+      "web"
+    ],
+    "body": "Web Development",
+    "description": "Tag: Web Development"
+  },
+  "Tag: Development": {
+    "prefix": [
+      "development",
+      "dev"
+    ],
+    "body": "Development",
+    "description": "Tag: Development"
+  },
+  "Tag: Home": {
+    "prefix": "home",
+    "body": "Home",
+    "description": "Tag: Home"
+  },
+  "Tag: Privacy": {
+    "prefix": "privacy",
+    "body": "Privacy",
+    "description": "Tag: Privacy"
+  },
+  "Tag: Hardware": {
+    "prefix": "hardware",
+    "body": "Hardware",
+    "description": "Tag: Hardware"
+  },
+  "Tag: Career": {
+    "prefix": "career",
+    "body": "Career",
+    "description": "Tag: Career"
+  },
+  "Tag: Wellness": {
+    "prefix": "wellness",
+    "body": "Wellness",
+    "description": "Tag: Wellness"
+  },
+  "Tag: Health": {
+    "prefix": "health",
+    "body": "Health",
+    "description": "Tag: Health"
+  },
+  "Tag: Linux": {
+    "prefix": "linux",
+    "body": "Linux",
+    "description": "Tag: Linux"
+  },
+  "Tag: WordPress": {
+    "prefix": [
+      "wordpress",
+      "wp"
+    ],
+    "body": "WordPress",
+    "description": "Tag: WordPress"
+  },
+  "Tag: Infrastructure": {
+    "prefix": [
+      "infrastructure",
+      "infra"
+    ],
+    "body": "Infrastructure",
+    "description": "Tag: Infrastructure"
+  },
+  "Tag: Security": {
+    "prefix": "security",
+    "body": "Security",
+    "description": "Tag: Security"
+  },
+  "Tag: Family": {
+    "prefix": "family",
+    "body": "Family",
+    "description": "Tag: Family"
+  },
+  "Tag: Social Media": {
+    "prefix": [
+      "social media",
+      "socialmedia",
+      "social"
+    ],
+    "body": "Social Media",
+    "description": "Tag: Social Media"
+  },
+  "Tag: Open Source": {
+    "prefix": [
+      "open source",
+      "opensource",
+      "oss"
+    ],
+    "body": "Open Source",
+    "description": "Tag: Open Source"
+  },
+  "Tag: Community": {
+    "prefix": "community",
+    "body": "Community",
+    "description": "Tag: Community"
+  },
+  "Tag: Content Management Systems": {
+    "prefix": [
+      "content management systems",
+      "contentmanagementsystems",
+      "cms",
+      "contentmanagement"
+    ],
+    "body": "Content Management Systems",
+    "description": "Tag: Content Management Systems"
+  },
+  "Tag: Travel": {
+    "prefix": "travel",
+    "body": "Travel",
+    "description": "Tag: Travel"
+  },
+  "Tag: Notes": {
+    "prefix": "notes",
+    "body": "Notes",
+    "description": "Tag: Notes"
+  },
+  "Tag: Fitness": {
+    "prefix": "fitness",
+    "body": "Fitness",
+    "description": "Tag: Fitness"
+  },
+  "Tag: Education": {
+    "prefix": [
+      "education",
+      "edu"
+    ],
+    "body": "Education",
+    "description": "Tag: Education"
+  },
+  "Tag: Software": {
+    "prefix": "software",
+    "body": "Software",
+    "description": "Tag: Software"
+  },
+  "Tag: Events": {
+    "prefix": "events",
+    "body": "Events",
+    "description": "Tag: Events"
+  },
+  "Tag: Self-hosting": {
+    "prefix": [
+      "self-hosting",
+      "selfhost"
+    ],
+    "body": "Self-hosting",
+    "description": "Tag: Self-hosting"
+  },
+  "Tag: Economy": {
+    "prefix": "economy",
+    "body": "Economy",
+    "description": "Tag: Economy"
+  },
+  "Tag: Writing": {
+    "prefix": "writing",
+    "body": "Writing",
+    "description": "Tag: Writing"
+  }
+}

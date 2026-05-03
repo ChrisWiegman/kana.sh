@@ -1,0 +1,93 @@
+title = "Kana Theme"
+baseURL = "https://kana.sh"
+theme = "kana-hugo-theme"
+locale = "en-us"
+timeout = "90s"
+disableHugoGeneratorInject = true
+cleanDestinationDir = true
+enableRobotsTXT = true
+enableGitInfo = true
+canonifyURLs = true
+disableKinds = ["taxonomy"]
+
+[params]
+author = "Chris Wiegman"
+mainSections = ["posts"]
+OpenGraph = true
+TwitterCards = true
+MobileWebAppTitle = "Kana"
+description = "A warm, earthy theme for your website, editor or terminal."
+imageSizes = [850, 710, 300]
+imageSizeString = "(max-width: 300px) 300w, (max-width: 710px) 710w, 850w"
+policies = "/policies"
+
+[params.license]
+name = "Creative Commons Licensed"
+title = "Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0) license"
+link = "https://creativecommons.org/licenses/by-nc-sa/4.0/"
+
+[minify]
+minifyOutput = true
+
+[pagination]
+pagerSize = 25
+
+[html]
+keepDefaultAttrVals = false
+keepDocumentTags = false
+keepEndTags = false
+keepSpecialComments = false
+
+[[menus.main]]
+name = "Contact"
+title = "Reach me via email"
+url = "mailto:contact@kana.sh"
+weight = 30
+
+[[menus.footer]]
+name = "VS Code"
+title = "The kana VS Code theme"
+pageRef = "/vscode"
+weight = 10
+
+[[menus.footer]]
+name = "Hugo"
+title = "The Kana Hugo theme"
+pageRef = "/hugo"
+weight = 20
+
+[[menus.footer]]
+name = "XCode"
+title = "The Kana XCode theme"
+pageRef = "/xcode"
+weight = 30
+
+[permalinks]
+posts = "/:year/:month/:slug/"
+
+[services.rss]
+limit = 30
+
+[outputs]
+home = ["HTML", "RSS", "JSON"]
+section = ["html"]
+taxonomy = ["html"]
+term = ["html"]
+
+[markup.highlight]
+noClasses = false
+
+[markup.goldmark.parser.attribute]
+block = true
+
+[markup.goldmark.parser]
+wrapStandAloneImageWithinParagraph = false
+
+[markup.goldmark.renderer]
+unsafe = true
+
+[markup.goldmark.renderHooks.image]
+useEmbedded = "fallback"
+
+[markup.goldmark.renderHooks.link]
+useEmbedded = "fallback"

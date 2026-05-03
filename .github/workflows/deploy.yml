@@ -1,0 +1,98 @@
+name: Deploy to Cloudflare Workers
+
+env:
+  SITE_TITLE: "Chris Wiegman"
+  SITE_URL: "https://kana.sh/"
+  RSS_URL: "https://kana.sh/index.xml"
+
+
+on:
+    push:
+        branches: [main]
+        paths-ignore:
+            - "content/drafts/**"
+            - ".vscode/**"
+            - "scripts/**"
+            - ".github/**"
+            - "Makefile"
+            - "package.json"
+            - "package-lock.json"
+            - "README.md"
+            - ".gitignore"
+            - "/gitmodules"
+            - ".devcontainer/**"
+            - ".frontmatter/**"
+    workflow_dispatch: {}
+    workflow_call:
+        inputs:
+            ref:
+                required: true
+                type: string
+    schedule:
+        - cron: "0 15 * * *"
+
+permissions:
+    contents: read
+
+concurrency:
+    group: ${{ github.workflow }}
+    cancel-in-progress: true
+
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v6
+              with:
+                  ref: ${{ inputs.ref }}
+                  submodules: true
+                  fetch-depth: 2
+
+            - name: Setup Hugo
+              run: |
+                  HUGO_VERSION=$(curl -s https://api.github.com/repos/gohugoio/hugo/releases/latest | jq -r '.tag_name' | sed 's/v//')
+                  wget -O /tmp/hugo.tar.gz "https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.tar.gz"
+                  tar -xzf /tmp/hugo.tar.gz -C /usr/local/bin hugo
+
+            - name: Cache Hugo resources
+              uses: actions/cache@v5
+              with:
+                  path: |
+                      resources
+                  key: ${{ runner.os }}-hugo-resources-${{ hashFiles('**/go.mod', '**/go.sum', '**/package-lock.json', '**/pnpm-lock.yaml', '**/yarn.lock', 'hugo.toml', 'hugo.yaml', 'hugo.json', 'config/**', 'assets/**') }}
+                  restore-keys: |
+                      ${{ runner.os }}-hugo-resources-
+
+            - name: Cache Hugo cacheDir
+              uses: actions/cache@v5
+              with:
+                  path: |
+                      .hugo_cache
+                  key: ${{ runner.os }}-hugo-cachedir-${{ hashFiles('**/go.mod', '**/go.sum', 'hugo.toml', 'hugo.yaml', 'hugo.json', 'config/**') }}
+                  restore-keys: |
+                      ${{ runner.os }}-hugo-cachedir-
+
+            - name: Build site
+              run: hugo --gc --minify --cacheDir "${{ github.workspace }}/.hugo_cache"
+
+            - name: Set up Node (with npm cache)
+              uses: actions/setup-node@v6
+              with:
+                  node-version: "lts/*"
+                  cache: "npm"
+
+            - name: Install Wrangler (cached)
+              run: npm ci
+
+            - name: Deploy to Cloudflare Workers
+              run: npx wrangler deploy
+              env:
+                  CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+                  CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+    ping:
+        needs: deploy
+        uses: ./.github/workflows/ping.yml
+        secrets: inherit

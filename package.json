@@ -1,0 +1,12 @@
+{
+  "name": "kana.sh",
+  "description": "This repo contains the source code for https://kana.sh built with [Hugo](https://gohugo.io) on [Cloudflare Workers](https://workers.cloudflare.com)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ChrisWiegman/kana.sh.git"
+  },
+  "homepage": "https://kana.sh",
+  "devDependencies": {
+    "wrangler": "^4.87.0"
+  }
+}

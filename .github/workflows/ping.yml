@@ -1,0 +1,204 @@
+name: Ping update services
+
+env:
+  SITE_TITLE: "Chris Wiegman"
+  SITE_URL: "https://kana.sh/"
+  RSS_URL: "https://kana.sh/index.xml"
+
+on:
+  workflow_dispatch: {}
+  workflow_call: {}
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Ping Ping-O-Matic
+        run: |
+          curl -sS -X POST "https://pingomatic.com/ping/" \
+            -H "Content-Type: application/x-www-form-urlencoded" \
+            --data-urlencode "title=${{ env.SITE_TITLE }}" \
+            --data-urlencode "blogurl=${{ env.SITE_URL }}" \
+            --data-urlencode "rssurl=${{ env.RSS_URL }}" \
+            --data-urlencode "chk_blogs=on" \
+            --data-urlencode "chk_feedburner=on" \
+            --data-urlencode "chk_newsgator=on" \
+            --data-urlencode "chk_myyahoo=on"
+
+      - name: Ping PubSubHubbub
+        env:
+          HUB_URL: https://pubsubhubbub.appspot.com/
+        run: |
+          curl -sS -X POST "$HUB_URL" \
+            -H "Content-Type: application/x-www-form-urlencoded" \
+            --data-urlencode "hub.mode=publish" \
+            --data-urlencode "hub.url=${{ env.SITE_URL }}" \
+            -o /dev/null -w "PubSubHubbub HTTP %{http_code}\n"
+
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0  # need history for per-file git log
+
+      - name: Build IndexNow payload from most recently edited posts
+        env:
+          INDEXNOW_KEY: ${{ secrets.INDEXNOW_KEY }}
+          SITE_HOST: "kana.sh"
+          SITE_BASE: "https://kana.sh"
+          MAX_URLS: "50"
+        run: |
+          set -euo pipefail
+
+          if [ -z "${INDEXNOW_KEY:-}" ]; then
+            echo "Missing secrets.INDEXNOW_KEY"
+            exit 1
+          fi
+
+          python3 - <<'PY' > indexnow.json
+          import os, re, json, subprocess
+          from datetime import datetime
+
+          site_base = os.environ["SITE_BASE"].rstrip("/")
+          site_host = os.environ["SITE_HOST"]
+          key = os.environ["INDEXNOW_KEY"]
+          max_urls = int(os.environ.get("MAX_URLS", "50"))
+
+          def list_post_files():
+            out = subprocess.check_output(
+              ["bash", "-lc", "ls -1 content/posts/**/*.md content/posts/**/*.markdown 2>/dev/null || true"],
+              text=True,
+            )
+            return [line.strip() for line in out.splitlines() if line.strip()]
+
+          def git_last_commit_iso(path: str) -> str | None:
+            try:
+              return subprocess.check_output(
+                ["git", "log", "-1", "--format=%cI", "--", path],
+                text=True,
+              ).strip() or None
+            except Exception:
+              return None
+
+          def iso_to_dt(iso: str) -> datetime | None:
+            try:
+              return datetime.fromisoformat(iso)
+            except Exception:
+              return None
+
+          def parse_front_matter(text: str) -> dict:
+            # Minimal YAML/TOML; good enough for date/slug
+            if text.startswith("---"):
+              m = re.search(r"^---\s*\n(.*?)\n---\s*\n", text, re.S)
+              if m:
+                fm = {}
+                for l in m.group(1).splitlines():
+                  if ":" in l:
+                    k, v = l.split(":", 1)
+                    fm[k.strip()] = v.strip().strip('"').strip("'")
+                return fm
+            if text.startswith("+++"):
+              m = re.search(r"^\+\+\+\s*\n(.*?)\n\+\+\+\s*\n", text, re.S)
+              if m:
+                fm = {}
+                for l in m.group(1).splitlines():
+                  if "=" in l:
+                    k, v = l.split("=", 1)
+                    fm[k.strip()] = v.strip().strip('"').strip("'")
+                return fm
+            return {}
+
+          def parse_date(s: str) -> datetime | None:
+            s = (s or "").strip()
+            if not s:
+              return None
+            # Handle common Hugo formats
+            for fmt in (
+              "%Y-%m-%d",
+              "%Y-%m-%dT%H:%M:%S%z",
+              "%Y-%m-%dT%H:%M:%S",
+              "%Y-%m-%d %H:%M:%S%z",
+              "%Y-%m-%d %H:%M:%S",
+            ):
+              try:
+                return datetime.strptime(s, fmt)
+              except Exception:
+                pass
+            # Last resort: try fromisoformat (handles many variants)
+            try:
+              return datetime.fromisoformat(s)
+            except Exception:
+              return None
+
+          def slugify(s: str) -> str:
+            s = s.strip().lower()
+            s = re.sub(r"[^a-z0-9\-]+", "-", s)
+            return s.strip("-")
+
+          # Collect all posts with their *commit* datetime (for sorting)
+          posts: list[tuple[datetime, str]] = []
+          for path in list_post_files():
+            iso = git_last_commit_iso(path)
+            dt = iso_to_dt(iso) if iso else None
+            if dt:
+              posts.append((dt, path))
+
+          posts.sort(key=lambda x: x[0], reverse=True)
+          posts = posts[:max_urls]
+
+          urls = []
+          for commit_dt, path in posts:
+            try:
+              text = open(path, encoding="utf-8").read()
+            except Exception:
+              continue
+
+            fm = parse_front_matter(text)
+
+            # Use FRONT MATTER date for URL (matches Hugo permalinks)
+            post_dt = parse_date(fm.get("date", ""))
+            if not post_dt:
+              # If you have posts without date, you can either skip or fallback.
+              # Skipping is safer than submitting wrong URLs.
+              continue
+
+            raw_slug = fm.get("slug") or os.path.splitext(os.path.basename(path))[0]
+            slug = slugify(raw_slug)
+
+            urls.append(f"{site_base}/{post_dt.year}/{post_dt.month:02d}/{slug}/")
+
+          # Always include key site URLs
+          urls.extend([
+            f"{site_base}/",
+            f"{site_base}/index.xml",
+            f"{site_base}/sitemap.xml",
+          ])
+
+          # de-dupe preserve order
+          seen = set()
+          deduped = []
+          for u in urls:
+            if u not in seen:
+              seen.add(u)
+              deduped.append(u)
+
+          payload = {
+            "host": site_host,
+            "key": key,
+            "keyLocation": f"{site_base}/indexnow.key",
+            "urlList": deduped,
+          }
+
+          print(json.dumps(payload, indent=2))
+          PY
+
+      - name: Submit URLs to IndexNow
+        run: |
+          set -euo pipefail
+          echo "Submitting the following payload:"
+          cat indexnow.json
+          echo ""
+          curl -sS -X POST "https://api.indexnow.org/indexnow" \
+            -H "Content-Type: application/json; charset=utf-8" \
+            --data-binary @indexnow.json \
+            -o /dev/null -w "IndexNow HTTP %{http_code}\n"

@@ -1,0 +1,3 @@
+[submodule "themes/kana-hugo-theme"]
+	path = themes/kana-hugo-theme
+	url = https://github.com/ChrisWiegman/kana-hugo-theme.git

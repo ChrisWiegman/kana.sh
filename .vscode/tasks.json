@@ -1,0 +1,38 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Create Draft",
+            "type": "shell",
+            "command": "make draft",
+            "problemMatcher": []
+        },
+        {
+            "label": "Add Tags",
+            "type": "shell",
+            "command": "make add-tags",
+            "problemMatcher": []
+        },
+        {
+            "label": "Publish Draft (now)",
+            "type": "shell",
+            "command": "node scripts/publish.js \"${relativeFile}\" now",
+            "problemMatcher": []
+        },
+        {
+            "label": "Publish Draft (later)",
+            "type": "shell",
+            "command": "read -p \"Publish date (YYYY-MM-DD): \" d; node scripts/publish.js \"${relativeFile}\" later \"$d\"",
+            "problemMatcher": []
+        },
+        {
+            "label": "Pick Image",
+            "type": "shell",
+            "command": "node scripts/pick-image.js",
+            "problemMatcher": [],
+            "presentation": {
+                "focus": true
+            }
+        }
+    ]
+}

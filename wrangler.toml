@@ -1,0 +1,9 @@
+name = "kana-sh"
+main = "./public"
+compatibility_date = "2026-04-15"
+preview_urls = true
+
+[assets]
+directory = "./public"
+not_found_handling = "404-page"
+html_handling = "auto-trailing-slash"
