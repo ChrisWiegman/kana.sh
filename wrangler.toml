@@ -1,5 +1,4 @@
 name = "kana-sh"
-main = "./public"
 compatibility_date = "2026-04-15"
 preview_urls = true
 
