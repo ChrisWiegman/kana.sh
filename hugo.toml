@@ -105,6 +105,9 @@ section = ["html"]
 taxonomy = ["html"]
 term = ["html"]
 
+[security]
+  allowContent = ['.*']
+
 [markup.highlight]
 noClasses = false
 
