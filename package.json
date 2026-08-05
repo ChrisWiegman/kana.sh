@@ -8,5 +8,8 @@
   "homepage": "https://kana.sh",
   "devDependencies": {
     "wrangler": "^4.119.0"
+  },
+  "overrides": {
+    "undici": "^7.29.0"
   }
 }
