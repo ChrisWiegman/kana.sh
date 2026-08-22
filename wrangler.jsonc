@@ -1,0 +1,16 @@
+{
+  "name": "kana-sh",
+  "compatibility_date": "2026-08-10",
+  "preview_urls": true,
+  "routes": [
+    {
+      "pattern": "kana.sh",
+      "custom_domain": true
+    }
+  ],
+  "assets": {
+    "directory": "./public",
+    "not_found_handling": "404-page",
+    "html_handling": "auto-trailing-slash"
+  }
+}
