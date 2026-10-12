@@ -7,9 +7,9 @@
   },
   "homepage": "https://kana.sh",
   "devDependencies": {
-    "wrangler": "^4.125.0"
+    "wrangler": "^4.149.0"
   },
   "overrides": {
-    "undici": "^8.10.0"
+    "undici": "^8.11.2"
   }
 }
