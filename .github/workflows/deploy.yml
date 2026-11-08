@@ -48,8 +48,8 @@ jobs:
                   submodules: true
                   fetch-depth: 2
 
-            # Installs the Hugo version pinned in mise.toml, so CI builds with the
-            # same release as local builds.
+            # Installs Hugo as set in mise.toml (latest), the same way local builds
+            # get it.
             - name: Setup Hugo
               uses: jdx/mise-action@v3
 
