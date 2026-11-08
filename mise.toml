@@ -1,0 +1,5 @@
+# Hugo version for local builds and CI (deploy.yml and link-check.yml read this
+# file through mise-action), so both build with the same release. Bump it here
+# on purpose after checking the site still builds.
+[tools]
+hugo-extended = "0.169.0"
