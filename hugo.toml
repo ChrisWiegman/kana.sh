@@ -49,7 +49,8 @@ quality = 90
 quality = 90
 hint = "drawing"
 [imaging.avif]
-quality = 90
+# AVIF's scale runs lower than WebP's; 60 matches WebP 90 at about half the size.
+quality = 60
 
 [minify]
 minifyOutput = true
