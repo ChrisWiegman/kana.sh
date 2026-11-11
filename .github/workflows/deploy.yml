@@ -58,6 +58,11 @@ jobs:
               shell: bash
               run: npm ci ${{ inputs.include-optional == 'true' && '--include=optional' || '' }}
 
+            - name: Add node_modules/.bin to PATH
+              shell: bash
+              run: echo "$GITHUB_WORKSPACE/node_modules/.bin" >> "$GITHUB_PATH"
+
+
             # Installs Hugo
             - name: Setup Hugo
               uses: peaceiris/actions-hugo@v3
