@@ -1,5 +1,0 @@
-# Hugo for local builds and CI (deploy.yml and link-check.yml read this file
-# through mise-action), so both use the same source. Tracks the latest release;
-# `rup` keeps the local copy current.
-[tools]
-hugo-extended = "latest"

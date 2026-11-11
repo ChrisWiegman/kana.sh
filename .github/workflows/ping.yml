@@ -1,13 +1,16 @@
 name: Ping update services
 
 env:
-  SITE_TITLE: "Chris Wiegman"
+  SITE_TITLE: "The Kana Theme"
   SITE_URL: "https://kana.sh/"
   RSS_URL: "https://kana.sh/index.xml"
 
 on:
   workflow_dispatch: {}
   workflow_call: {}
+
+permissions:
+  contents: read
 
 jobs:
   ping:
@@ -37,9 +40,13 @@ jobs:
             -o /dev/null -w "PubSubHubbub HTTP %{http_code}\n"
 
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
-          fetch-depth: 0  # need history for per-file git log
+            submodules: true
+            fetch-depth: 2
+
+      - name: Build Hugo site
+        uses: ./.github/actions/build-hugo-site
 
       - name: Build IndexNow payload from most recently edited posts
         env:
@@ -55,21 +62,20 @@ jobs:
             exit 1
           fi
 
+          # Ask Hugo for every page's real, rendered permalink instead of
+          # reimplementing its title-to-slug rules (which have surprising
+          # edge cases -- apostrophes are dropped, dots are kept, etc.) --
+          # a from-scratch slugifier drifts out of sync with Hugo's own.
+          hugo list all > hugo-pages.csv
+
           python3 - <<'PY' > indexnow.json
-          import os, re, json, subprocess
+          import csv, os, json, subprocess
           from datetime import datetime
 
           site_base = os.environ["SITE_BASE"].rstrip("/")
           site_host = os.environ["SITE_HOST"]
           key = os.environ["INDEXNOW_KEY"]
           max_urls = int(os.environ.get("MAX_URLS", "50"))
-
-          def list_post_files():
-            out = subprocess.check_output(
-              ["bash", "-lc", "ls -1 content/posts/**/*.md content/posts/**/*.markdown 2>/dev/null || true"],
-              text=True,
-            )
-            return [line.strip() for line in out.splitlines() if line.strip()]
 
           def git_last_commit_iso(path: str) -> str | None:
             try:
@@ -80,92 +86,28 @@ jobs:
             except Exception:
               return None
 
-          def iso_to_dt(iso: str) -> datetime | None:
-            try:
-              return datetime.fromisoformat(iso)
-            except Exception:
-              return None
-
-          def parse_front_matter(text: str) -> dict:
-            # Minimal YAML/TOML; good enough for date/slug
-            if text.startswith("---"):
-              m = re.search(r"^---\s*\n(.*?)\n---\s*\n", text, re.S)
-              if m:
-                fm = {}
-                for l in m.group(1).splitlines():
-                  if ":" in l:
-                    k, v = l.split(":", 1)
-                    fm[k.strip()] = v.strip().strip('"').strip("'")
-                return fm
-            if text.startswith("+++"):
-              m = re.search(r"^\+\+\+\s*\n(.*?)\n\+\+\+\s*\n", text, re.S)
-              if m:
-                fm = {}
-                for l in m.group(1).splitlines():
-                  if "=" in l:
-                    k, v = l.split("=", 1)
-                    fm[k.strip()] = v.strip().strip('"').strip("'")
-                return fm
-            return {}
-
-          def parse_date(s: str) -> datetime | None:
-            s = (s or "").strip()
-            if not s:
-              return None
-            # Handle common Hugo formats
-            for fmt in (
-              "%Y-%m-%d",
-              "%Y-%m-%dT%H:%M:%S%z",
-              "%Y-%m-%dT%H:%M:%S",
-              "%Y-%m-%d %H:%M:%S%z",
-              "%Y-%m-%d %H:%M:%S",
-            ):
-              try:
-                return datetime.strptime(s, fmt)
-              except Exception:
-                pass
-            # Last resort: try fromisoformat (handles many variants)
-            try:
-              return datetime.fromisoformat(s)
-            except Exception:
-              return None
-
-          def slugify(s: str) -> str:
-            s = s.strip().lower()
-            s = re.sub(r"[^a-z0-9\-]+", "-", s)
-            return s.strip("-")
-
-          # Collect all posts with their *commit* datetime (for sorting)
+          # Collect posts with their *commit* datetime (for "most recently
+          # edited" ordering) and their Hugo-computed permalink.
           posts: list[tuple[datetime, str]] = []
-          for path in list_post_files():
-            iso = git_last_commit_iso(path)
-            dt = iso_to_dt(iso) if iso else None
-            if dt:
-              posts.append((dt, path))
+          with open("hugo-pages.csv", newline="", encoding="utf-8") as f:
+            for row in csv.DictReader(f):
+              path = row.get("path", "")
+              permalink = row.get("permalink", "")
+              if not path.startswith("content/posts/") or not permalink:
+                continue
+              if row.get("draft", "false").lower() == "true":
+                continue
+              iso = git_last_commit_iso(path)
+              if not iso:
+                continue
+              try:
+                commit_dt = datetime.fromisoformat(iso)
+              except ValueError:
+                continue
+              posts.append((commit_dt, permalink))
 
           posts.sort(key=lambda x: x[0], reverse=True)
-          posts = posts[:max_urls]
-
-          urls = []
-          for commit_dt, path in posts:
-            try:
-              text = open(path, encoding="utf-8").read()
-            except Exception:
-              continue
-
-            fm = parse_front_matter(text)
-
-            # Use FRONT MATTER date for URL (matches Hugo permalinks)
-            post_dt = parse_date(fm.get("date", ""))
-            if not post_dt:
-              # If you have posts without date, you can either skip or fallback.
-              # Skipping is safer than submitting wrong URLs.
-              continue
-
-            raw_slug = fm.get("slug") or os.path.splitext(os.path.basename(path))[0]
-            slug = slugify(raw_slug)
-
-            urls.append(f"{site_base}/{post_dt.year}/{post_dt.month:02d}/{slug}/")
+          urls = [permalink for _, permalink in posts[:max_urls]]
 
           # Always include key site URLs
           urls.extend([
