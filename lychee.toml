@@ -1,0 +1,31 @@
+# Shared config for `make check-links` and .github/workflows/link-check.yml.
+# lychee loads this automatically from the working directory.
+
+cache = true
+max_cache_age = "6d"
+no_progress = false
+
+# Accept 403s: many sites block bots outright, which isn't a real broken link.
+accept = ["200..=299", "403"]
+
+exclude = [
+    '^(?:/|#|\.)',
+    '^file:',
+    '^mailto:',
+    'https?://(www\.)?kana\.sh',
+]
+
+# Identify ourselves so hosts don't silently throttle/block an anonymous bot UA.
+user_agent = "Mozilla/5.0 (compatible; kana.sh link checker; +https://kana.sh)"
+
+# Give slower sites more time before giving up, and retry transient/rate-limit
+# failures with a real gap instead of hammering them again immediately.
+timeout = 30
+max_retries = 4
+retry_wait_time = 3
+
+# Keep overall load low enough that we don't trip rate limits or saturate
+# our own connection pool (defaults are 128 total / 10 per host / 50ms gap).
+max_concurrency = 32
+host_concurrency = 4
+host_request_interval = "500ms"
