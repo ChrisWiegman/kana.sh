@@ -16,13 +16,23 @@ enable = true
 author = "Chris Wiegman"
 mainSections = ["posts"]
 OpenGraph = true
-TwitterCards = true
+TwitterCards = false
+jsonld = true
 MobileWebAppTitle = "Kana"
 description = "A warm, earthy theme for your website, editor or terminal."
-imageSizes = [1700, 1420, 850, 710, 600, 300]
-imageSizeString = "(max-width: 882px) calc(100vw - 2rem), 850px"
 policies = "/policies"
 headerIcon = "images/logo.png"
+
+[params.robots]
+blockAgents = ["CCBot"]
+
+[params.robots.contentSignals]
+search = true
+ai-input = true
+ai-train = false
+
+[params.agentSkills]
+markdownNegotiation = true
 
 [params.license]
 name = "Creative Commons Licensed"
@@ -34,10 +44,11 @@ resampleFilter = "lanczos"
 
 [imaging.jpeg]
 quality = 90
-
 [imaging.webp]
 quality = 90
 hint = "drawing"
+[imaging.avif]
+quality = 90
 
 [minify]
 minifyOutput = true
@@ -112,7 +123,8 @@ posts = "/:year/:month/:slug/"
 limit = 30
 
 [outputs]
-home = ["HTML", "RSS", "JSON"]
+home = ["HTML", "RSS", "JSON", "markdown", "llms", "llmsfull", "agentskills"]
+page = ["HTML", "markdown"]
 section = ["html"]
 taxonomy = ["html"]
 term = ["html"]
