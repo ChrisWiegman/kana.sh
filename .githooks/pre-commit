@@ -1,0 +1,21 @@
+#!/bin/sh
+set -eu
+
+max_bytes=26214400
+tmp_report=$(mktemp -t git-large-files.XXXXXX)
+trap 'rm -f "$tmp_report"' EXIT
+
+git diff --cached --name-only --diff-filter=AM -z | \
+  while IFS= read -r -d '' file; do
+    size=$(git cat-file -s ":$file" 2>/dev/null || echo 0)
+    if [ "$size" -gt "$max_bytes" ]; then
+      printf '  - %s (%s bytes)\n' "$file" "$size" >> "$tmp_report"
+    fi
+  done
+
+if [ -s "$tmp_report" ]; then
+  printf '%s\n' "Commit blocked: staged file(s) exceed 25 MB limit:"
+  cat "$tmp_report"
+  printf '%s\n' "Reduce file size or move large assets out of the repo before committing."
+  exit 1
+fi
