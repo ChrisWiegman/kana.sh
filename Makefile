@@ -26,6 +26,7 @@ start: install
 
 .PHONY: update
 update:
+	git submodule foreach --quiet git fetch --quiet --tags --force
 	git submodule update --remote
 
 .PHONY: github
