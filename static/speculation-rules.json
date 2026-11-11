@@ -1,0 +1,15 @@
+{
+  "prefetch": [
+    {
+      "source": "document",
+      "where": {
+        "and": [
+          { "href_matches": "/*", "relative_to": "document" },
+          { "not": { "href_matches": ["/*.xml", "/*.json", "/*.md", "/*.txt", "/*.pdf", "/*.zip"], "relative_to": "document" } },
+          { "not": { "selector_matches": "[rel~=nofollow], [download]" } }
+        ]
+      },
+      "eagerness": "moderate"
+    }
+  ]
+}

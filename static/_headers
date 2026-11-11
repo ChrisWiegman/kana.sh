@@ -6,6 +6,14 @@
   Link: </llms.txt>; rel="describedby"; type="text/plain", </sitemap.xml>; rel="sitemap"; type="application/xml"
   Permissions-Policy: microphone=(), geolocation=(), autoplay=(), camera=()
   Content-Security-Policy: default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; img-src 'self' data:; font-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self'; upgrade-insecure-requests;
+  Speculation-Rules: "/speculation-rules.json"
+
+# Prefetch rules for same-site links (replaces Cloudflare Speed Brain, which skips Workers).
+/speculation-rules.json
+  ! Link
+  ! Speculation-Rules
+  Content-Type: application/speculationrules+json
+  Cache-Control: public, max-age=86400
 
 /sitemap.xml
   ! Content-Security-Policy
