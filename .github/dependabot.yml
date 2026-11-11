@@ -1,0 +1,23 @@
+version: 2
+updates:
+  # Actions referenced directly in .github/workflows/*.yml.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      github-actions:
+        patterns:
+          - "*"
+
+  # Dependabot only scans .github/workflows for action versions, so our
+  # local composite action (which pins its own third-party actions)
+  # needs its own entry to get update PRs.
+  - package-ecosystem: github-actions
+    directory: /.github/actions/setup-deps
+    schedule:
+      interval: weekly
+    groups:
+      github-actions:
+        patterns:
+          - "*"

@@ -1,0 +1,60 @@
+name: Setup dependencies
+description: >
+  Sets up Node LTS with npm caching and runs npm ci, then (optionally)
+  installs Hugo, restores its resource/module caches, and runs the
+  production build (--gc --minify). Assumes the repo has already been
+  checked out (with submodules if building, since the theme is a git
+  submodule).
+
+inputs:
+  include-optional:
+    description: Pass --include=optional to npm ci (needed for scripts/ tooling like draft/publish/extract-tags).
+    default: "false"
+  build-site:
+    description: Install Hugo and build the site. Hugo's asset pipeline needs the Node deps, so this always runs after npm ci.
+    default: "false"
+
+runs:
+  using: composite
+  steps:
+    - name: Set up Node
+      uses: actions/setup-node@v7
+      with:
+        node-version: "lts/*"
+        cache: "npm"
+
+    - name: Install dependencies
+      shell: bash
+      run: npm ci ${{ inputs.include-optional == 'true' && '--include=optional' || '' }}
+
+    # Lets Hugo find npm-installed tools (e.g. postcss) without npx.
+    - name: Add node_modules/.bin to PATH
+      shell: bash
+      run: echo "$GITHUB_WORKSPACE/node_modules/.bin" >> "$GITHUB_PATH"
+
+    - name: Setup Hugo
+      if: inputs.build-site == 'true'
+      uses: peaceiris/actions-hugo@v3
+      with:
+        hugo-version: 'latest'
+        extended: true
+
+    # Hugo's resources/ (processed images, bundles) and its module/build
+    # cache (.hugo_cache) are cheap to share across runs but expensive to
+    # rebuild from scratch, so both are restored from one cache entry
+    # keyed on everything that can change the build output.
+    - name: Cache Hugo build artifacts
+      if: inputs.build-site == 'true'
+      uses: actions/cache@v6
+      with:
+        path: |
+          resources
+          .hugo_cache
+        key: ${{ runner.os }}-hugo-${{ hashFiles('**/go.mod', '**/go.sum', '**/package-lock.json', '**/pnpm-lock.yaml', '**/yarn.lock', 'hugo.toml', 'hugo.yaml', 'hugo.json', 'config/**', 'assets/**') }}
+        restore-keys: |
+          ${{ runner.os }}-hugo-
+
+    - name: Build site
+      if: inputs.build-site == 'true'
+      shell: bash
+      run: hugo --gc --minify --cacheDir "${{ github.workspace }}/.hugo_cache"
