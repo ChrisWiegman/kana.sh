@@ -24,7 +24,8 @@ policies = "/policies"
 headerIcon = "images/logo.png"
 
 [params.robots]
-blockAgents = ["CCBot"]
+# Robots-only tokens that opt out of AI training without affecting search crawling.
+blockAgents = ["CCBot", "Google-Extended", "Applebot-Extended"]
 
 [params.robots.contentSignals]
 search = true
