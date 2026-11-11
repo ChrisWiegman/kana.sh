@@ -44,9 +44,43 @@ jobs:
         with:
             submodules: true
             fetch-depth: 2
+      - name: Set up Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: "lts/*"
+          cache: "npm"
 
-      - name: Build Hugo site
-        uses: ./.github/actions/build-hugo-site
+      - name: Install dependencies
+        shell: bash
+        run: npm ci ${{ inputs.include-optional == 'true' && '--include=optional' || '' }}
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: 'latest'
+          extended: true
+
+      # Hugo's resources/ (processed images, bundles) and its module/build
+      # cache (.hugo_cache) are cheap to share across runs but expensive to
+      # rebuild from scratch, so both are restored from one cache entry
+      # keyed on everything that can change the build output.
+      - name: Cache Hugo build artifacts
+        uses: actions/cache@v6
+        with:
+          path: |
+            resources
+            .hugo_cache
+          key: ${{ runner.os }}-hugo-${{ hashFiles('**/go.mod', '**/go.sum', '**/package-lock.json', '**/pnpm-lock.yaml', '**/yarn.lock', 'hugo.toml', 'hugo.yaml', 'hugo.json', 'config/**', 'assets/**') }}
+          restore-keys: |
+            ${{ runner.os }}-hugo-
+
+      - name: Add node_modules/.bin to PATH
+        shell: bash
+        run: echo "$GITHUB_WORKSPACE/node_modules/.bin" >> "$GITHUB_PATH"
+
+      - name: Build site
+        shell: bash
+        run: hugo --gc --minify --cacheDir "${{ github.workspace }}/.hugo_cache"
 
       - name: Build IndexNow payload from most recently edited posts
         env:
