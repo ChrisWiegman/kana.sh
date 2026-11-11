@@ -19,8 +19,8 @@ OpenGraph = true
 TwitterCards = true
 MobileWebAppTitle = "Kana"
 description = "A warm, earthy theme for your website, editor or terminal."
-imageSizes = [850, 710, 300]
-imageSizeString = "(max-width: 300px) 300px, (max-width: 710px) 710px, 850px"
+imageSizes = [1700, 1420, 850, 710, 600, 300]
+imageSizeString = "(max-width: 882px) calc(100vw - 2rem), 850px"
 policies = "/policies"
 headerIcon = "images/logo.png"
 
@@ -28,6 +28,16 @@ headerIcon = "images/logo.png"
 name = "Creative Commons Licensed"
 title = "Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0) license"
 link = "https://creativecommons.org/licenses/by-nc-sa/4.0/"
+
+[imaging]
+resampleFilter = "lanczos"
+
+[imaging.jpeg]
+quality = 90
+
+[imaging.webp]
+quality = 90
+hint = "drawing"
 
 [minify]
 minifyOutput = true
