@@ -4,11 +4,13 @@ theme = "kana-hugo-theme"
 locale = "en-us"
 timeout = "90s"
 disableHugoGeneratorInject = true
-cleanDestinationDir = true
 enableRobotsTXT = true
 enableGitInfo = true
 canonifyURLs = true
 disableKinds = ["taxonomy"]
+
+[build.cleanDestinationDir]
+enable = true
 
 [params]
 author = "Chris Wiegman"
