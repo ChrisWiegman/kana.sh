@@ -18,7 +18,7 @@ TwitterCards = true
 MobileWebAppTitle = "Kana"
 description = "A warm, earthy theme for your website, editor or terminal."
 imageSizes = [850, 710, 300]
-imageSizeString = "(max-width: 300px) 300w, (max-width: 710px) 710w, 850w"
+imageSizeString = "(max-width: 300px) 300px, (max-width: 710px) 710px, 850px"
 policies = "/policies"
 headerIcon = "images/logo.png"
 
