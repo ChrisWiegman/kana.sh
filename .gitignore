@@ -23,6 +23,9 @@ node_modules
 # IDE Settings
 .idea
 
-# Taxonomy Reports
-tag-canonical.json
-tag-map.json
+# AI Settings and files
+.claude/
+
+# Lychee cache
+.lycheecache
+lychee-report.md

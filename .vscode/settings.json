@@ -8,5 +8,6 @@
     "editor.snippetSuggestions": "top",
     "editor.suggest.showSnippets": true,
     "editor.wordBasedSuggestions": "off"
-  }
+  },
+  "workbench.editor.closeOnFileDelete": true
 }

@@ -10,13 +10,10 @@ clean:
 		.dev.vars \
 		.env \
 		.env.* \
-		tag-canonical.json \
-		tag-map.json \
 		node_modules \
 		.claude \
 		lychee-report.md \
 		.lycheecache
-
 
 .PHONY: start
 start: install
