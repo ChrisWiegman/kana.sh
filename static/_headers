@@ -34,6 +34,30 @@
 /.well-known/*
   ! Link
 
+# Agent discovery files: CORS so browser-based agents can read them, and
+# media types a static host can't infer from the file name.
+/.well-known/api-catalog
+  Content-Type: application/linkset+json; profile="https://www.rfc-editor.org/info/rfc9727"
+  Access-Control-Allow-Origin: *
+
+/.well-known/ard.json
+  Access-Control-Allow-Origin: *
+
+/.well-known/ai-catalog.json
+  Access-Control-Allow-Origin: *
+
+/.well-known/poppy.json
+  Access-Control-Allow-Origin: *
+
+/openapi.json
+  ! Link
+  Content-Type: application/vnd.oai.openapi+json
+  Access-Control-Allow-Origin: *
+
+/.well-known/mcp/server-card.json
+  Content-Type: application/mcp-server-card+json
+  Access-Control-Allow-Origin: *
+
 /llms.txt
   ! Link
 
@@ -58,6 +82,9 @@
   Cache-Control: public, max-age=31536000, immutable
 
 /scripts/search.min.*
+  Cache-Control: public, max-age=31536000, immutable
+
+/scripts/webmcp.min.*
   Cache-Control: public, max-age=31536000, immutable
 
 /scripts/*
