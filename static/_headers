@@ -84,9 +84,6 @@
 /scripts/search.min.*
   Cache-Control: public, max-age=31536000, immutable
 
-/scripts/webmcp.min.*
-  Cache-Control: public, max-age=31536000, immutable
-
 /scripts/*
   ! Link
 
