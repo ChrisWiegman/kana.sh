@@ -2,8 +2,8 @@
   "name": "kana-sh",
   "compatibility_date": "2026-11-10",
   "preview_urls": true,
-  // Read-only MCP server at /mcp; every other path is served as a static asset.
-  "main": "themes/kana-hugo-theme/workers/mcp.mjs",
+  // Read-only MCP server (/mcp) and A2A agent (/a2a); every other path is served as a static asset.
+  "main": "themes/kana-hugo-theme/workers/agents.mjs",
   "routes": [
     {
       "pattern": "kana.sh",
@@ -15,6 +15,6 @@
     "not_found_handling": "404-page",
     "html_handling": "auto-trailing-slash",
     "binding": "ASSETS",
-    "run_worker_first": ["/mcp", "/mcp/*"]
+    "run_worker_first": ["/mcp", "/mcp/*", "/a2a"]
   }
 }

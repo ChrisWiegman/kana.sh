@@ -58,6 +58,10 @@
   Content-Type: application/mcp-server-card+json
   Access-Control-Allow-Origin: *
 
+/.well-known/agent-card.json
+  Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=3600
+
 /llms.txt
   ! Link
 
