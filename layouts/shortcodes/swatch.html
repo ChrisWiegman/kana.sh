@@ -1,0 +1,10 @@
+{{- /*
+  A palette card: {{< swatch name="Primary" color="#c8804a" >}}
+  Optional: note="…" replaces the hex label; outline=true adds a rule under dark colours.
+  The colour is an SVG fill attribute rather than an inline style, so pages keep a strict style-src CSP.
+*/ -}}
+{{- $color := .Get "color" -}}
+{{- if not (findRE `^#[0-9a-fA-F]{6}$` $color) -}}
+{{- errorf "swatch: color %q in %s must be a #rrggbb hex value" $color .Position -}}
+{{- end -}}
+<div class="swatch"><svg class="swatch-color{{ if .Get "outline" }} swatch-outline{{ end }}" viewBox="0 0 1 1" preserveAspectRatio="none" aria-hidden="true" focusable="false"><rect width="1" height="1" fill="{{ $color }}"/></svg><div class="swatch-label"><strong>{{ .Get "name" }}</strong><code>{{ with .Get "note" }}{{ . }}{{ else }}{{ $color }}{{ end }}</code></div></div>

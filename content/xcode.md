@@ -22,42 +22,12 @@ mkdir -p ~/Library/Developer/Xcode/UserData/FontAndColorThemes
 
 ## The Palette
 
-<div style="display:flex; flex-wrap:wrap; gap:1rem; margin:2rem 0 1rem;">
-    <div style="flex:1; min-width:130px; border-radius:8px; overflow:hidden; border:1px solid #4a4540;">
-        <div style="background:#c8804a; height:56px;"></div>
-        <div style="padding:0.75rem; background:#252220;">
-            <strong style="color:#ede6dd; display:block; font-size:0.9rem;">Keywords</strong>
-            <code style="color:#a88060; font-size:0.8rem;">#c8804a</code>
-        </div>
-    </div>
-    <div style="flex:1; min-width:130px; border-radius:8px; overflow:hidden; border:1px solid #4a4540;">
-        <div style="background:#a88060; height:56px;"></div>
-        <div style="padding:0.75rem; background:#252220;">
-            <strong style="color:#ede6dd; display:block; font-size:0.9rem;">Types</strong>
-            <code style="color:#a88060; font-size:0.8rem;">#a88060</code>
-        </div>
-    </div>
-    <div style="flex:1; min-width:130px; border-radius:8px; overflow:hidden; border:1px solid #4a4540;">
-        <div style="background:#d4a87a; height:56px;"></div>
-        <div style="padding:0.75rem; background:#252220;">
-            <strong style="color:#ede6dd; display:block; font-size:0.9rem;">Strings</strong>
-            <code style="color:#a88060; font-size:0.8rem;">#d4a87a</code>
-        </div>
-    </div>
-    <div style="flex:1; min-width:130px; border-radius:8px; overflow:hidden; border:1px solid #4a4540;">
-        <div style="background:#ede6dd; height:56px;"></div>
-        <div style="padding:0.75rem; background:#252220;">
-            <strong style="color:#ede6dd; display:block; font-size:0.9rem;">Text Bright</strong>
-            <code style="color:#a88060; font-size:0.8rem;">#ede6dd</code>
-        </div>
-    </div>
-    <div style="flex:1; min-width:130px; border-radius:8px; overflow:hidden; border:1px solid #4a4540;">
-        <div style="background:#1a1816; height:56px; border-bottom:1px solid #4a4540;"></div>
-        <div style="padding:0.75rem; background:#252220;">
-            <strong style="color:#ede6dd; display:block; font-size:0.9rem;">Background</strong>
-            <code style="color:#a88060; font-size:0.8rem;">#1a1816</code>
-        </div>
-    </div>
+<div class="swatches">
+    {{< swatch name="Keywords" color="#c8804a" >}}
+    {{< swatch name="Types" color="#a88060" >}}
+    {{< swatch name="Strings" color="#d4a87a" >}}
+    {{< swatch name="Text Bright" color="#ede6dd" >}}
+    {{< swatch name="Background" color="#1a1816" outline=true >}}
 </div>
 
 ## Swift Preview

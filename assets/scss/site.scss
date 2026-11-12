@@ -1,0 +1,131 @@
+// kana.sh content styles, loaded by the theme on every page.
+// These replace inline style attributes so the site can keep style-src 'self'.
+// Rules are scoped to `main article` to outrank the theme's own article rules.
+@use "components/variables" as *;
+
+main article {
+  // Palette cards (shortcodes/swatch.html)
+  .swatches {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin: 2rem 0 1rem;
+
+    &.swatches-spaced {
+      margin-bottom: 3rem;
+    }
+  }
+
+  .swatch {
+    flex: 1;
+    min-width: 130px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid $border-light;
+  }
+
+  .swatch-color {
+    display: block;
+    width: 100%;
+    height: 56px;
+  }
+
+  .swatch-outline {
+    border-bottom: 1px solid $border-light;
+  }
+
+  .swatch-label {
+    padding: 0.75rem;
+    background: $navbar;
+
+    strong {
+      color: $text-bright;
+      display: block;
+      font-size: 0.9rem;
+    }
+
+    code {
+      color: $secondary;
+      font-size: 0.8rem;
+    }
+  }
+
+  // ANSI colour table (shortcodes/chip.html). Nested under .table-scroll so it
+  // matches the theme's mobile `.page main article .content table` rule, which
+  // it then wins by loading later.
+  .table-scroll {
+    overflow-x: auto;
+    margin: 1.5rem 0 2rem;
+  }
+
+  .table-scroll table.ansi {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 0.9rem;
+
+    th {
+      text-align: left;
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid $border-light;
+      color: $text-bright;
+    }
+
+    td {
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid $border;
+
+      &:first-child {
+        color: $text;
+      }
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    code {
+      color: $secondary;
+    }
+  }
+
+  .chip {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: 1px solid $border-light;
+    border-radius: 3px;
+    vertical-align: middle;
+    margin-right: 0.4rem;
+  }
+
+  // Variant cards on the home page
+  .variants {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    margin: 2rem 0 3rem;
+  }
+
+  a.variant,
+  a.variant:hover {
+    border: 1px solid $border-light;
+    border-radius: 8px;
+    padding: 1.5rem;
+    color: $text;
+    display: block;
+    text-decoration: none;
+  }
+
+  .variant h3 {
+    margin-top: 0;
+    margin-bottom: 0.75rem;
+    color: $primary;
+    font-size: 1.25rem;
+  }
+
+  .variant p {
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+}
